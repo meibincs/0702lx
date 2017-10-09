@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    	*{
+    		margin: 0px;
+    		padding: 0px;
+    	}
+    	html,body{
+    		width: 100%;
+    		height: 100%;
+    	}
+    	body{
+    		background: green;
+    		display: flex;
+    		justify-content: center;
+    		align-items: center;
+    	}
+    	.container{
+    		width: 500px;
+    		background: #ccc;
+    		border-radius: 5px;
+    		padding-bottom: 60px;
+    		position: relative;
+    	}
+    	.container>span{
+    		float: left;
+    		width: 90px;
+    		height: 40px;
+    		background: #fff;
+    		display: flex;
+    		justify-content: center;
+    		align-items: center;
+    		margin: 5px;
+    		border-radius: 5px;
+    	}
+    	.btn{
+    		position: absolute;
+    		left: 50%;
+    		bottom: -10px;
+    		transform: translate(-50%,-50%);
+    		width: 100px;
+    		height: 40px;
+    		background: dodgerblue;
+    		border: none;
+    		border-radius: 5px;
+    		font-size: 18px;
+    		color: #FFFFFF;
+    		outline: none;
+    	}
+    </style>
+</head>
+<body>
+	<div class="container" id="container">
+		
+		<button class="btn" id="btn">点名</button>
+	</div>
+	<script id="nameList">
+		/*
+		 
+		 张波    李晓新    梅斌    葛培    邓浩良    李文杰    杨浩然     陈泓鑫    曾令禹     吕英扩   谭精华    林雄     伍雄辉     刘锋    张扬    张钊铭    杨朝政   邓思丽   叶富雄   李欣仲  
+		  
+		 */
+	</script>
+	<script>
+		
+		var J = {
+			getEl:function(id){     //  获取元素
+				return document.getElementById(id);
+			},
+			getData:function(){    //   获取数据
+				var el = this.getEl("nameList");
+				var node = el.innerHTML
+							.replace(/\/\*|(\*\/)/g," ")
+							.trim()
+							.split(/\s+/);
+				return node;
+			},
+			renderData:function(){    //   渲染数据到页面
+				var data = this.getData();
+				for(var i=0;i<data.length;i++){
+					var span = document.createElement('span');
+					span.innerHTML = data[i];
+					this.getEl('container').appendChild(span);
+				}
+			},
+			rollCall:function(){     //  点名事件
+				var btn = this.getEl('btn');
+				var that = this;
+				var timer = null;
+				var stop = 0;
+				btn.onclick = function(){
+					clearInterval(timer);
+					var names = that.getEl('container').getElementsByTagName('span');
+					timer = setInterval(function(){
+						if(stop === 100){
+							clearInterval(timer);
+							stop = 0;
+						}
+						var num = parseInt(Math.random()*names.length);
+						for(var i=0;i<names.length;i++){
+							names[i].style.background = '#fff';
+							names[i].style.color = '#000';
+						}
+						names[num].style.background = "red";
+						names[num].style.color = '#fff';
+						stop++;
+					},10);
+					
+				}
+			},
+			init:function(){     //   整个面向对象编程入口
+				this.renderData();
+				this.rollCall();
+			}
+		}
+		J.init();
+	</script>
+</body>
+</html>
